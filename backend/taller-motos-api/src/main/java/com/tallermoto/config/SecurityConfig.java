@@ -2,14 +2,12 @@ package com.tallermoto.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * Configuración de seguridad para desarrollo del Taller de Motos
@@ -57,7 +55,7 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             // 🛡️ Deshabilitar CSRF para APIs REST (necesario para Postman/Swagger)
             .csrf(csrf -> csrf.disable())
@@ -71,34 +69,9 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/**").permitAll() // Todos los endpoints de auth
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()  // Swagger UI
                 
-                // Endpoints protegidos por rol - ORDEN ESPECÍFICO A GENERAL
-                .requestMatchers("/api/usuarios/**").hasAnyRole("ADMIN", "RECEPCIONISTA")
-                .requestMatchers("/api/pagos/**").hasAnyRole("ADMIN", "RECEPCIONISTA")
-                
-                // Endpoints para MECANICO - TODOS LOS MÉTODOS HTTP
-                .requestMatchers(HttpMethod.GET, "/api/clientes/**").hasAnyRole("ADMIN", "RECEPCIONISTA", "MECANICO")
-                .requestMatchers(HttpMethod.GET, "/api/motos/**").hasAnyRole("ADMIN", "RECEPCIONISTA", "MECANICO")
-                .requestMatchers(HttpMethod.GET, "/api/ordenes-trabajo/**").hasAnyRole("ADMIN", "RECEPCIONISTA", "MECANICO")
-                .requestMatchers(HttpMethod.POST, "/api/ordenes-trabajo/**").hasAnyRole("ADMIN", "RECEPCIONISTA", "MECANICO")  // Para buscar órdenes por mecánico
-                .requestMatchers(HttpMethod.PUT, "/api/ordenes-trabajo/**").hasAnyRole("ADMIN", "RECEPCIONISTA", "MECANICO")
-                .requestMatchers(HttpMethod.GET, "/api/servicios/**").hasAnyRole("ADMIN", "RECEPCIONISTA", "MECANICO")
-                .requestMatchers(HttpMethod.GET, "/api/repuestos/**").hasAnyRole("ADMIN", "RECEPCIONISTA", "MECANICO")
-                
-                // Endpoints DETALLES ORDEN - MECANICO necesita GET y POST
-                .requestMatchers("/api/detalles-orden/**").hasAnyRole("ADMIN", "RECEPCIONISTA", "MECANICO")  // Sin especificar método HTTP
-                
-                // Endpoints USOS REPUESTO - MECANICO necesita TODOS los métodos
-                .requestMatchers("/api/usos-repuesto/**").hasAnyRole("ADMIN", "RECEPCIONISTA", "MECANICO")  // Sin especificar método HTTP
-                
-                // Endpoints ORDEN HISTORIAL - MECANICO necesita GET y POST
-                .requestMatchers("/api/orden-historial/**").hasAnyRole("ADMIN", "RECEPCIONISTA", "MECANICO")  // Sin especificar método HTTP
-                
-                // Todo lo demás requiere autenticación
-                .anyRequest().authenticated()
-            )
-            
-            // 🔌 Agregar filtro JWT antes del filtro de autenticación por defecto
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                // Para desarrollo: permitir todo temporalmente
+                .anyRequest().permitAll()
+            );
         
         return http.build();
     }

@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +22,6 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "*")
 @Tag(name = "Autenticación", description = "API para autenticación JWT del sistema")
 public class AuthController {
 
@@ -43,7 +41,7 @@ public class AuthController {
         @ApiResponse(responseCode = "400", description = "Datos de entrada inválidos"),
         @ApiResponse(responseCode = "401", description = "Credenciales inválidas")
     })
-    public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDTO loginRequest) {
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO loginRequest) {
         try {
             String usernameOrEmail = loginRequest.getUsernameOrEmail();
             String password = loginRequest.getPassword();

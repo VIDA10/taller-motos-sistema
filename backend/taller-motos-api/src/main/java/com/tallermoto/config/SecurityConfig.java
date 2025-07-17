@@ -1,6 +1,5 @@
 package com.tallermoto.config;
 
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -96,15 +95,6 @@ public class SecurityConfig {
                 
                 // Todo lo demás requiere autenticación
                 .anyRequest().authenticated()
-            )
-            
-            // Configure exception handling for authentication failures
-            .exceptionHandling(exceptions -> exceptions
-                .authenticationEntryPoint((request, response, authException) -> {
-                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                    response.setContentType("application/json");
-                    response.getWriter().write("{\"error\":\"Authentication required\"}");
-                })
             )
             
             // 🔌 Agregar filtro JWT antes del filtro de autenticación por defecto

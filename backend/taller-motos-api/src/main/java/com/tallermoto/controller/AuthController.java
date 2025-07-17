@@ -23,6 +23,7 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(origins = "*")
 @Tag(name = "Autenticación", description = "API para autenticación JWT del sistema")
 public class AuthController {
 

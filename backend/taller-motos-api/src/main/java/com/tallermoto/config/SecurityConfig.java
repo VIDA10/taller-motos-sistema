@@ -68,9 +68,9 @@ public class SecurityConfig {
             
             // � CONFIGURACIÓN JWT: ENDPOINTS PÚBLICOS Y PROTEGIDOS
             .authorizeHttpRequests(auth -> auth
-                // Endpoints públicos (sin autenticación)
+                // Endpoints públicos (sin autenticación) - ORDEN MUY IMPORTANTE
+                .requestMatchers("/api/auth/**").permitAll() // Todos los endpoints de auth
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()  // Swagger UI
-                .requestMatchers("/api/auth/login", "/api/auth/logout").permitAll() // Autenticación
                 
                 // Endpoints protegidos por rol - ORDEN ESPECÍFICO A GENERAL
                 .requestMatchers("/api/usuarios/**").hasAnyRole("ADMIN", "RECEPCIONISTA")

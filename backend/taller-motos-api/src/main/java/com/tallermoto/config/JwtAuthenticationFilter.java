@@ -37,6 +37,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String requestURI = request.getRequestURI();
         System.out.println("🔍 JwtAuthenticationFilter - Procesando: " + requestURI);
         
+        // Skip JWT validation for public endpoints
+        if (isPublicEndpoint(requestURI)) {
+            System.out.println("🌐 Endpoint público detectado, saltando validación JWT: " + requestURI);
+            filterChain.doFilter(request, response);
+            return;
+        }
+        
         try {
             String jwt = parseJwt(request);
             System.out.println("📋 Token extraído: " + (jwt != null ? "SÍ (longitud: " + jwt.length() + ")" : "NO"));
@@ -78,6 +85,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    /**
+     * Check if the endpoint is public and should skip JWT validation
+     */
+    private boolean isPublicEndpoint(String requestURI) {
+        // Public endpoints that don't require authentication
+        return requestURI.startsWith("/api/auth/") ||
+               requestURI.startsWith("/swagger-ui/") ||
+               requestURI.startsWith("/v3/api-docs");
     }
 
     /**

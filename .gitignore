@@ -19,6 +19,7 @@
 *.tar.gz
 *.rar
 
+<<<<<<< HEAD
 # virtual machine crash logs
 hs_err_pid*
 replay_pid*
@@ -177,3 +178,8 @@ logs/
 # Temporary files
 tmp/
 temp/
+=======
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+replay_pid*
+>>>>>>> b4a1c8e497a4418505bce2e78deea56d31adc74d

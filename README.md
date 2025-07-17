@@ -1,6 +1,6 @@
 # 🏍️ Sistema de Gestión de Taller de Motos
 
-Sistema enterprise completo para la gestión de talleres de reparación de motocicletas.
+Sistema enterprise completo para la gestión de talleres de reparación de motocicletas con auto-deploy en DigitalOcean.
 
 ## 🎯 Características Principales
 
@@ -13,6 +13,7 @@ Sistema enterprise completo para la gestión de talleres de reparación de motoc
 - ✅ Dashboards personalizados por rol
 - ✅ Herramientas de diagnóstico y monitoreo
 - ✅ Manejo robusto de errores y conectividad
+- ✅ Auto-deploy con GitHub Actions
 
 ## 🏗️ Stack Tecnológico
 
